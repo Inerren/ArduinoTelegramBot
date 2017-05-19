@@ -12,22 +12,31 @@ namespace ArduinoTelegramBot.Core
         /// <summary>
         /// Class to work with Arduino
         /// </summary>
-        /// <param name="ComPort">COM-port number</param>
-        /// <param name="BaudRate">COM-port baud rate</param>
-        public Arduino(string ComPort, int BaudRate = 9600)
+        /// <param name="comPort">COM-port number</param>
+        /// <param name="baudRate">COM-port baud rate</param>
+        public Arduino(string comPort, int baudRate = 9600)
         {
-            if (String.IsNullOrWhiteSpace(ComPort))
+            if (String.IsNullOrWhiteSpace(comPort))
             {
                 throw new ArgumentNullException("comPort", "Need to COM-port number to initialize.");
             }
 
-            _serialPort = new SerialPortStream(ComPort, BaudRate);
+            _serialPort = new SerialPortStream(comPort, baudRate);
             _serialPort.ReadTimeout = 500;
             _serialPort.WriteTimeout = 500;
 
             _serialPort.DataReceived += SerialPort_DataReceived;
+        }
 
-            _serialPort.Open();
+        /// <summary>
+        /// Initializes work of Arduino
+        /// </summary>
+        public void Initialize()
+        {
+            if (!_serialPort.IsOpen)
+            {
+                _serialPort.Open();
+            }
         }
 
         /// <summary>
@@ -36,14 +45,17 @@ namespace ArduinoTelegramBot.Core
         /// <param name="command">Command to send</param>
         public void SendCommand(string command)
         {
-            if (String.IsNullOrWhiteSpace(command)) { return; }
+            if (String.IsNullOrWhiteSpace(command)) return;
 
             if (!command.EndsWith("\n"))
             {
                 command += "\n";
             }
 
-            _serialPort.Write(command);
+            if (_serialPort.IsOpen)
+            {
+                _serialPort.Write(command);
+            }
         }
 
         /// <summary>
