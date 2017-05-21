@@ -23,7 +23,7 @@ void setup() {
 
 void loop() {
   if (stringComplete) {
-    Serial.println("Command is:");
+    Serial.print("Command is: ");
     Serial.println(inputString);
     runCommand(inputString);
     // clear the string
@@ -83,35 +83,36 @@ void serialEvent() {
 
 void runCommand(String command) {
   if (command == "red") {
-    Serial.println("Red");
     fading(pinR);
+    Serial.println("Done: 'red'.");
     return;
   }
   if (command == "green") {
-    Serial.println("Green");
     fading(pinG);
+    Serial.println("Done: 'green'.");
     return;
   }
   if (command == "blue") {
-    Serial.println("Blue");
     fading(pinB);
+    Serial.println("Done: 'blue'.");
     return;
   }
   if (command == "fade red") {
-    Serial.println("Fading red");
     fading(pinR, true);
+    Serial.println("Done: 'fading red'.");
     return;
   }
   if (command == "fade green") {
-    Serial.println("Fading green");
     fading(pinG, true);
+    Serial.println("Done: 'fading green'.");
     return;
   }
   if (command == "fade blue") {
-    Serial.println("Fading blue");
     fading(pinB, true);
+    Serial.println("Done: 'fading blue'.");
     return;
   }
   Serial.println("Unknown command. Cleaning.");
   clearPins();
+  Serial.println("Done: 'cleaning'.");
 }
